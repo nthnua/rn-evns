@@ -1,22 +1,21 @@
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { StatusBar } from 'expo-status-bar'
 import { NativeBaseProvider } from 'native-base'
-import { StyleSheet, Text, View } from 'react-native'
 import Channels from './features/Channels/Channels'
+import Posts from './features/Posts/Posts'
 
-export default function App() {
+export default function App () {
+  const Stack = createNativeStackNavigator()
   return (
-    <NativeBaseProvider>
-      <StatusBar style='auto' />
-      <Channels />
-    </NativeBaseProvider >
+    <NavigationContainer>
+      <NativeBaseProvider>
+        <Stack.Navigator>
+          <Stack.Screen name='Home' component={Channels} />
+          <Stack.Screen name='Posts' component={Posts} />
+        </Stack.Navigator>
+        <StatusBar style='auto' />
+      </NativeBaseProvider>
+    </NavigationContainer>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-})

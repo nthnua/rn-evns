@@ -39,3 +39,12 @@ export function getChannels (userId) {
     return getDocs(chnlQuery)
   }).catch(err => console.error(err))
 }
+export function getPosts (chnlId) {
+  const chnlRef = collection(db, 'channels')
+  const chnlQuery = query(chnlRef, where('id', '==', `${chnlId}`))
+  return getDocs(chnlQuery).then(qs => {
+    const postsRef = collection(db, 'posts')
+    const chnlQuery = query(postsRef, where('id', 'in', qs.docs[0].get('posts')))
+    return getDocs(chnlQuery)
+  }).catch(err => console.error(err))
+}
