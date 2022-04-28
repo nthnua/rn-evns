@@ -13,10 +13,10 @@ export default function ({ navigation }) {
     }).catch(err => console.error(err))
   }, [])
   const Channels = channels.map(chnl => <Box
-    marginY='3' alignItems='center' key={chnl.get('id')} onTouchEnd={() => navigation.navigate('Posts', {
+    marginY='2' alignItems='center' key={chnl.get('id')} onTouchEnd={() => navigation.navigate('Posts', {
       chnlId: chnl.get('id')
     })}
-  >
+                                        >
     <Box
       maxW='full' rounded='lg' overflow='hidden' borderColor='coolGray.200' borderWidth='1' _dark={{
         borderColor: 'coolGray.600',

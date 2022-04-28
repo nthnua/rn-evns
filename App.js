@@ -12,7 +12,7 @@ export default function App () {
       <NativeBaseProvider>
         <Stack.Navigator>
           <Stack.Screen name='Home' component={Channels} />
-          <Stack.Screen name='Posts' component={Posts} />
+          <Stack.Screen name='Posts' component={Posts} options={({ route }) => ({ title: route.params.chnlId })} />
         </Stack.Navigator>
         <StatusBar style='auto' />
       </NativeBaseProvider>
