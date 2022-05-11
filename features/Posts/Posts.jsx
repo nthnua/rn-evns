@@ -65,33 +65,33 @@ export default function ({ route, navigation }) {
           <Text fontWeight='bold'>
             Urls:
           </Text>
-          {post.get('urls').map(url => <Text
+          {post.get('urls').map((url, i) => <Text key={url + i}
             onPress={() => Linking.openURL(`${url}`)}
             fontSize='xs' _light={{
               color: 'green.500'
             }} _dark={{
               color: 'green.400'
             }} fontWeight='bold' ml='-0.5' mt='-1'
-                                       >
+          >
             {url}
-                                       </Text>)}
+          </Text>)}
           <Text fontWeight='bold'>
             Contact Numbers:
           </Text>
-          {post.get('contacts').map(contact => <Text
+          {post.get('contacts').map((contact, i) => <Text key={contact + i}
             onPress={() => Linking.openURL(`tel:${contact}`)}
             fontSize='xs' _light={{
               color: 'green.500'
             }} _dark={{
               color: 'green.400'
             }} fontWeight='bold' ml='-0.5' mt='-1'
-                                               >
+          >
             {contact}
-                                               </Text>)}
+          </Text>)}
         </Stack>
       </Stack>
     </Box>
-                                  </Box>
+  </Box>
   )
   return (
     <ScrollView
