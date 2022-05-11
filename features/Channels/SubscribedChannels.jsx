@@ -1,4 +1,4 @@
-import { AspectRatio, Box, Center, Fab, Heading, Icon, Image, ScrollView, Skeleton, Stack, Text } from 'native-base'
+import { AspectRatio, Box, Fab, Heading, Icon, Image, ScrollView, Stack, Text } from 'native-base'
 import { useEffect, useState } from 'react'
 import { getChannels } from '../firebase'
 import LoadingScreen from './LoadingScreen'
@@ -66,7 +66,10 @@ export default function ({ navigation }) {
       }}
     >
       {loading ? <LoadingScreen /> : <Box safeAreaTop='8' safeAreaBottom='8'>{Channels}
-        <Fab renderInPortal={false} shadow={2} size="sm" icon={<Icon color="white" as={MaterialIcons} name="add" size="sm" />} />
+        <Fab renderInPortal={false} shadow={2} size="sm" icon={<Icon color="white" as={MaterialIcons} name="add" size="sm" />}
+          onPress={() => {
+            navigation.navigate('AddChannels')
+          }} />
       </Box>}
 
     </ScrollView>

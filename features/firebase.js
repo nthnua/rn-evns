@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app'
-import { addDoc, collection, getDoc, doc, getFirestore, query, where, getDocs } from 'firebase/firestore/lite'
+import { addDoc, collection, getDoc, doc, getFirestore, query, where, getDocs, updateDoc, arrayUnion } from 'firebase/firestore/lite'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -18,7 +18,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
 
-export async function addUser (userId, name, type, subscriptions) {
+export async function addUser(userId, name, type, subscriptions) {
   try {
     await addDoc(collection(getFirestore(), 'users', '1'), {
       name,
@@ -30,7 +30,7 @@ export async function addUser (userId, name, type, subscriptions) {
     console.error(e)
   }
 }
-export function getChannels (userId) {
+export function getChannels(userId) {
   const usersRef = collection(db, 'users')
   const q = query(usersRef, where('id', '==', `${userId}`))
   return getDocs(q).then(qs => {
@@ -39,7 +39,22 @@ export function getChannels (userId) {
     return getDocs(chnlQuery)
   }).catch(err => console.error(err))
 }
-export function getPosts (chnlId) {
+export function getNotSubscribedChannels(userId) {
+  const usersRef = collection(db, 'users')
+  const q = query(usersRef, where('id', '==', `${userId}`))
+  return getDocs(q).then(qs => {
+    const chnlRef = collection(db, 'channels')
+    const chnlQuery = query(chnlRef, where('id', 'not-in', qs.docs[0].get('subscriptions')))
+    return getDocs(chnlQuery)
+  }).catch(err => console.error(err))
+}
+export function subscribeToChannel(chnlId, userId) {
+  const userRef = doc(db, 'users', `${userId}`)
+  return updateDoc(userRef, {
+    subscriptions: arrayUnion(`${chnlId}`)
+  })
+}
+export function getPosts(chnlId) {
   const chnlRef = collection(db, 'channels')
   const chnlQuery = query(chnlRef, where('id', '==', `${chnlId}`))
   return getDocs(chnlQuery).then(qs => {
