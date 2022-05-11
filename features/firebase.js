@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app'
-import { addDoc, collection, getDoc, doc, getFirestore, query, where, getDocs, updateDoc, arrayUnion } from 'firebase/firestore/lite'
+import { addDoc, collection, getDoc, doc, getFirestore, query, where, getDocs, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore/lite'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -31,27 +31,33 @@ export async function addUser(userId, name, type, subscriptions) {
   }
 }
 export function getChannels(userId) {
-  const usersRef = collection(db, 'users')
-  const q = query(usersRef, where('id', '==', `${userId}`))
-  return getDocs(q).then(qs => {
+  const userRef = doc(db, 'users', `${userId}`)
+  return getDoc(userRef).then(userSanp => {
     const chnlRef = collection(db, 'channels')
-    const chnlQuery = query(chnlRef, where('id', 'in', qs.docs[0].get('subscriptions')))
+    const chnlQuery = query(chnlRef, where('id', 'in', userSanp.get('subscriptions')))
     return getDocs(chnlQuery)
   }).catch(err => console.error(err))
 }
 export function getNotSubscribedChannels(userId) {
-  const usersRef = collection(db, 'users')
-  const q = query(usersRef, where('id', '==', `${userId}`))
-  return getDocs(q).then(qs => {
-    const chnlRef = collection(db, 'channels')
-    const chnlQuery = query(chnlRef, where('id', 'not-in', qs.docs[0].get('subscriptions')))
-    return getDocs(chnlQuery)
-  }).catch(err => console.error(err))
+  const userRef = doc(db, 'users', `${userId}`)
+  return getDoc(userRef).then(
+    userSanp => {
+      const chnlRef = collection(db, 'channels')
+      const chnlQuery = query(chnlRef, where('id', 'not-in', userSanp.get('subscriptions')))
+      return getDocs(chnlQuery)
+    }
+  ).catch(err => console.error(err))
 }
-export function subscribeToChannel(chnlId, userId) {
+export function subscribeToChannel(userId, chnlIds) {
   const userRef = doc(db, 'users', `${userId}`)
   return updateDoc(userRef, {
-    subscriptions: arrayUnion(`${chnlId}`)
+    'subscriptions': arrayUnion(...chnlIds)
+  })
+}
+export function removeSubscriptions(userId, chnlId) {
+  const userRef = doc(db, 'users', `${userId}`)
+  return updateDoc(userRef, {
+    'subscriptions': arrayRemove(chnlId)
   })
 }
 export function getPosts(chnlId) {

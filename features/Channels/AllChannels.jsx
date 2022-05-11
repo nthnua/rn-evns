@@ -1,14 +1,15 @@
 import { AspectRatio, Box, Checkbox, Fab, Heading, Icon, Image, ScrollView, Stack, Text } from 'native-base'
 import { useEffect, useState } from 'react'
-import { getAllChannels, getChannels, getNotSubscribedChannels } from '../firebase'
+import { getAllChannels, getChannels, getNotSubscribedChannels, removeSubscriptions } from '../firebase'
 import LoadingScreen from './LoadingScreen'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 export default function ({ navigation }) {
     const [channels, setChannels] = useState([])
     const [loading, setLoading] = useState('true')
+    const userId = 'rxtXq51Fd2XeykzwE7Y7'
     useEffect(() => {
-        getNotSubscribedChannels(1).then(chnls => {
+        getNotSubscribedChannels(userId).then(chnls => {
             setChannels(chnls.docs)
             setLoading(false)
         }).catch(err => console.error(err))
@@ -50,7 +51,10 @@ export default function ({ navigation }) {
                                 color: 'violet.400'
                             }} fontWeight='500' ml='-0.5' mt='-1'
                         >
-                            {chnl.get('fullname')}
+
+                            {
+                                chnl.get('fullname')
+                            }
                         </Text>
                     </Stack>
                 </Stack>
@@ -68,7 +72,7 @@ export default function ({ navigation }) {
             {loading ? <LoadingScreen /> : <Box safeAreaTop='8' safeAreaBottom='8'>{Channels}
                 <Fab renderInPortal={false} shadow={2} size="sm" icon={<Icon color="white" as={MaterialIcons} name="check" size="sm" />}
                     onPress={() => {
-                        navigation.navigate('AddChannels')
+
                     }} />
             </Box>}
 
