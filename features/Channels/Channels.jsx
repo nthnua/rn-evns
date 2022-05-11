@@ -1,7 +1,8 @@
-import { AspectRatio, Box, Heading, Image, ScrollView, Skeleton, Stack, Text } from 'native-base'
+import { AspectRatio, Box, Center, Fab, Heading, Icon, Image, ScrollView, Skeleton, Stack, Text } from 'native-base'
 import { useEffect, useState } from 'react'
 import { getChannels } from '../firebase'
 import LoadingScreen from './LoadingScreen'
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 export default function ({ navigation }) {
   const [channels, setChannels] = useState([])
@@ -64,7 +65,10 @@ export default function ({ navigation }) {
         minW: '72'
       }}
     >
-      {loading ? <LoadingScreen /> : <Box safeAreaTop='8' safeAreaBottom='8'>{Channels}</Box>}
+      {loading ? <LoadingScreen /> : <Box safeAreaTop='8' safeAreaBottom='8'>{Channels}
+        <Fab renderInPortal={false} shadow={2} size="sm" icon={<Icon color="white" as={MaterialIcons} name="add" size="sm" />} />
+      </Box>}
+
     </ScrollView>
   )
 }
