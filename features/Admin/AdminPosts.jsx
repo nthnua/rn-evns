@@ -21,6 +21,7 @@ export default function ({ }) {
 
     useEffect(() => {
         const unsub = subscribe(chnlId, setPosts, setLoading)
+        return unsub
     }, [])
     const Posts = posts.map(post => <Box marginY='2' alignItems='center' key={post.get('id')}>
         <Box
