@@ -1,22 +1,27 @@
 import { AspectRatio, Box, Button, Heading, Image, Input, ScrollView, Stack, Text, TextArea } from 'native-base'
 import { useEffect, useState } from 'react'
 import LoadingScreen from '../Channels/LoadingScreen'
-import { getPosts } from '../firebase'
+import { getPosts, subscribe } from '../firebase'
 import { Linking } from 'react-native'
 import { useRoute } from '@react-navigation/native'
 
 export default function ({ }) {
     const [posts, setPosts] = useState([])
     const [loading, setLoading] = useState('true')
-    const route = useRoute()
-    useEffect(() => {
-        const { chnlId } = route.params
-        getPosts(chnlId).then(psts => {
-            setPosts(psts.docs)
-            setLoading(false)
-        }).catch(err => console.error(err))
-    }, [])
+    const [title, setTitle] = useState('')
+    const [body, setBody] = useState('')
+    const [contacts, setContacts] = useState('')
+    const [imgUrl, setImgUrl] = useState('')
+    const [infoUrls, setInfoUrls] = useState('')
 
+    const route = useRoute()
+    const { chnlId } = route.params
+    const handleSend = () => {
+    }
+
+    useEffect(() => {
+        const unsub = subscribe(chnlId, setPosts, setLoading)
+    }, [])
     const Posts = posts.map(post => <Box marginY='2' alignItems='center' key={post.get('id')}>
         <Box
             maxW='full' rounded='lg' overflow='hidden' borderColor='coolGray.200' borderWidth='1' _dark={{
@@ -110,21 +115,21 @@ export default function ({ }) {
                 : <Box safeAreaTop='8' safeAreaBottom='8'>
                     {Posts}
                     <Box alignItems='center' w='100%'>
-                        <TextArea rounded='lg' h={10} placeholder='Title' w='100%' />
+                        <TextArea rounded='lg' h={10} placeholder='Title' w='100%' value={title} onChange={(e) => setTitle(e.currentTarget.value)} />
                     </Box>
                     <Box alignItems='center' w='100%'>
-                        <TextArea rounded='lg' h={20} placeholder='Body' w='100%' />
+                        <TextArea rounded='lg' h={20} placeholder='Body' value={body} onChange={(e) => setBody(e.currentTarget.value)} w='100%' />
                     </Box>
                     <Box alignItems='center' w='100%'>
-                        <TextArea rounded='lg' h={20} placeholder='Contacts' w='100%' />
+                        <TextArea rounded='lg' h={20} placeholder='Contacts' value={contacts} onChange={(e) => setContacts(e.currentTarget.value)} w='100%' />
                     </Box>
                     <Box alignItems='center' w='100%'>
-                        <TextArea rounded='lg' h={10} placeholder='Image URL' w='100%' />
+                        <TextArea rounded='lg' h={10} placeholder='Image URL' w='100%' value={imgUrl} onChange={(e) => setImgUrl(e.currentTarget.value)} />
                     </Box>
                     <Box alignItems='center' w='100%'>
-                        <TextArea rounded='lg' h={20} placeholder='Registration/Info URLs' w='100%' />
+                        <TextArea rounded='lg' h={20} placeholder='Registration/Info URLs' w='100%' value={infoUrls} onChange={(e) => setInfoUrls(e.currentTarget.value)} />
                     </Box>
-                    <Button rounded='lg' my='2'>Send</Button>
+                    <Button rounded='lg' onPress={handleSend} my='2'>Send</Button>
                 </Box>}
         </ScrollView>
     )
