@@ -76,15 +76,9 @@ export function getPosts(chnlId) {
 }
 
 export function subscribe(chnlId, setPosts, setLoading) {
-  const chnlRef = collection(db, 'channels')
-  const chnlQuery = query(chnlRef, where('id', '==', `${chnlId}`))
-  return getDocs(chnlQuery).then(qs => {
-    const q = query(collection(db, 'posts'), where('id', 'in', qs.docs[0].get('posts')))
-    return onSnapshot(q, (postsSnap) => {
-      setPosts(postsSnap.docs)
-      setLoading(false)
-    })
-
-  }).catch(err => console.error(err))
-
+  const q = query(collection(db, 'posts'), where('channelId', '==', `${chnlId}`))
+  return onSnapshot(q, (postsSnap) => {
+    setPosts(postsSnap.docs)
+    setLoading(false)
+  })
 }
