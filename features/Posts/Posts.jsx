@@ -1,7 +1,7 @@
 import { AspectRatio, Box, Heading, Image, ScrollView, Stack, Text } from 'native-base'
 import { useEffect, useState } from 'react'
 import LoadingScreen from '../Channels/LoadingScreen'
-import { getPosts, subscribe } from '../firebase'
+import { subscribe } from '../firebase'
 import { Linking } from 'react-native'
 
 export default function ({ route, navigation }) {
@@ -11,10 +11,6 @@ export default function ({ route, navigation }) {
   useEffect(() => {
     const unsub = subscribe(chnlId, setPosts, setLoading)
     return unsub
-    // getPosts(chnlId).then(psts => {
-    //   setPosts(psts.docs)
-    //   setLoading(false)
-    // }).catch(err => console.error(err))
   }, [])
 
   const Posts = posts.map(post => <Box marginY='2' alignItems='center' key={post.get('id')}>

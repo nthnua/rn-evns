@@ -1,4 +1,4 @@
-import { AspectRatio, Box, Center, Skeleton, Spacer, VStack } from 'native-base'
+import { Box, Center, Skeleton, Spacer, VStack } from 'native-base'
 
 export default function () {
   return (

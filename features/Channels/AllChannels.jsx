@@ -25,7 +25,7 @@ export default function ({ subdChnls, setSubdChnls }) {
   }, [])
   const Channels = channels.map(chnl => <Box
     marginY='2' alignItems='center' key={chnl.get('id')}
-  >
+                                        >
     <Checkbox colorScheme='blue' value={chnl.get('id')}>
       <Box
         maxW='full' rounded='lg' overflow='hidden' borderColor='coolGray.200' borderWidth='1' _dark={{

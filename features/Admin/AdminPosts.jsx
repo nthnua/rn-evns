@@ -1,7 +1,7 @@
-import { AspectRatio, Box, Button, FormControl, Heading, Image, Input, ScrollView, Stack, Text, TextArea, WarningOutlineIcon } from 'native-base'
+import { AspectRatio, Box, Button, Heading, Image, ScrollView, Stack, Text, TextArea } from 'native-base'
 import { useEffect, useState } from 'react'
 import LoadingScreen from '../Channels/LoadingScreen'
-import { getPosts, sendMessage, subscribe } from '../firebase'
+import { sendMessage, subscribe } from '../firebase'
 import { Linking } from 'react-native'
 import { useRoute } from '@react-navigation/native'
 

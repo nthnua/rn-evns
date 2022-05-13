@@ -17,12 +17,12 @@ export default function ({ subdChnls, setSubdChnls }) {
   const navigation = useNavigation()
   useEffect(() => {
     if (subdChnls.length > 0) {
-      console.log(subdChnls)
       getChannels(subdChnls).then(chnls => {
         setChannels(chnls.docs)
         setLoading(false)
       }).catch(err => console.error(err))
     } else {
+      setChannels([])
       setLoading(false)
     }
   }, [subdChnls])

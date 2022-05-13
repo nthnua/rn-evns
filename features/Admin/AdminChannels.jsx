@@ -1,6 +1,6 @@
 import { AspectRatio, Box, Heading, Image, Pressable, ScrollView, Stack, Text } from 'native-base'
 import { useEffect, useState } from 'react'
-import { getAdminChannels, signUp } from '../firebase'
+import { getAdminChannels } from '../firebase'
 import { useNavigation } from '@react-navigation/native'
 import LoadingScreen from '../Channels/LoadingScreen'
 
