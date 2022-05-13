@@ -75,7 +75,7 @@ export default function ({ route, navigation }) {
             }} _dark={{
               color: 'green.400'
             }} fontWeight='bold' ml='-0.5' mt='-1'
-          >
+                                            >
             {url}
           </Text>)}
           <Text fontWeight='bold'>
@@ -89,7 +89,7 @@ export default function ({ route, navigation }) {
             }} _dark={{
               color: 'green.400'
             }} fontWeight='bold' ml='-0.5' mt='-1'
-          >
+                                                    >
             {contact}
           </Text>)}
         </Stack>

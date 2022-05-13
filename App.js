@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import AdminChannels from './features/Admin/AdminChannels'
 import AdminPosts from './features/Admin/AdminPosts'
 
-export default function App() {
+export default function App () {
   const [subdChnls, setSubdChnls] = useState([])
   const [adminInfo, setAdminInfo] = useState({
     isAdmin: false,
@@ -32,7 +32,7 @@ export default function App() {
   useEffect(() => {
     const jsonValue = JSON.stringify(
       {
-        isAdmin: false,
+        isAdmin: true,
         userId: '12'
       }
     )
@@ -53,7 +53,7 @@ export default function App() {
           <Stack.Screen
             name='AdminPosts' options={({ route }) => ({
               title: route.params.chnlName
-            })} children={() => <AdminPosts userId={adminInfo.userId} />}
+            })} children={() => <AdminPosts adminId={adminInfo.userId} />}
           />
         </Stack.Navigator>
         <StatusBar style='auto' />
