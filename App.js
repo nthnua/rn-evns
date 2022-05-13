@@ -74,72 +74,65 @@ export default function App () {
                       )
                     }} children={() => <Welcome setFresh={setFresh} />}
                   />
-                  <Stack.Screen
-                    name='SignIn' options={{
-                      headerShown: false
-                    }} children={() => <AdminSignIn setUserInfo={setUserInfo} />}
-                  />
                 </>
                 )
-              : (!userInfo.isAdmin && (
-                <>
-                  <Stack.Screen
-                    name='UserHome' children={() => <SubscribedChannels subdChnls={subdChnls} setSubdChnls={setSubdChnls} />}
-                    options={
-                      {
-                        headerRight: () => (
-                          <Button
-                            onPress={() => {
-                              setFresh(true)
-                            }}
-                          >
-                            Admin?
-                          </Button>
-                        )
-                      }
-                    }
-                  />
-                  <Stack.Screen
-                    name='SignIn' options={{
-                      headerShown: false
-                    }} children={() => <AdminSignIn setUserInfo={setUserInfo} />}
-                  />
-                  <Stack.Screen name='AddChannels' children={() => <AllChannels subdChnls={subdChnls} setSubdChnls={setSubdChnls} />} />
-                  <Stack.Screen
-                    name='Posts' component={Posts} options={({ route }) => ({
-                      title: route.params.chnlName
-                    })}
-                  />
-                </>
-                )) ||
-              (
-                <>
-                  <Stack.Screen
-                    name='AdminHome' options={{
-                      headerRight: () => (
-                        <Button
-                          onPress={() => {
-                            signOutAdmin()
-                          }}
-                        >
-                          Sign Out
-                        </Button>
+              : (
+                  userInfo.isAdmin
+                    ? (
+                      <>
+                        <Stack.Screen
+                          name='AdminHome' options={{
+                            headerRight: () => (
+                              <Button
+                                onPress={() => {
+                                  signOutAdmin()
+                                }}
+                              >
+                                Sign Out
+                              </Button>
+                            )
+                          }} children={() => <AdminChannels userId={userInfo.userId} />}
+                        />
+                        <Stack.Screen
+                          name='AdminPosts' options={({ route }) => ({
+                            title: route.params.chnlName
+                          })} children={() => <AdminPosts adminId={userInfo.userId} />}
+                        />
+                      </>
                       )
-                    }} children={() => <AdminChannels userId={userInfo.userId} />}
-                  />
-                  <Stack.Screen
-                    name='SignIn' options={{
-                      headerShown: false
-                    }} children={() => <AdminSignIn setUserInfo={setUserInfo} />}
-                  />
-                  <Stack.Screen
-                    name='AdminPosts' options={({ route }) => ({
-                      title: route.params.chnlName
-                    })} children={() => <AdminPosts adminId={userInfo.userId} />}
-                  />
-                </>
-              )
+                    : (
+                      <>
+                        <Stack.Screen
+                          name='UserHome' children={() => <SubscribedChannels subdChnls={subdChnls} setSubdChnls={setSubdChnls} />}
+                          options={
+                          {
+                            headerRight: () => (
+                              <Button
+                                onPress={() => {
+                                  setFresh(true)
+                                }}
+                              >
+                                Admin?
+                              </Button>
+                            )
+                          }
+                        }
+                        />
+                        <Stack.Screen name='AddChannels' children={() => <AllChannels subdChnls={subdChnls} setSubdChnls={setSubdChnls} />} />
+                        <Stack.Screen
+                          name='Posts' component={Posts} options={({ route }) => ({
+                            title: route.params.chnlName
+                          })}
+                        />
+                      </>
+                      ))
           }
+          <Stack.Screen
+            navigationKey={userInfo.isAdmin ? 'admin' : 'user'}
+            name='SignIn' options={{
+              headerShown: false
+            }} children={() => <AdminSignIn setUserInfo={setUserInfo} />}
+          />
         </Stack.Navigator>
         <StatusBar style='auto' />
       </NativeBaseProvider>

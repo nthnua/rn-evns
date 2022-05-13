@@ -31,11 +31,11 @@ export function signIn (email, password) {
 export function atchSignIn (setFresh, setAdminInfo) {
   onAuthStateChanged(auth, user => {
     if (user) {
-      setFresh(false)
       setAdminInfo({
         isAdmin: true,
         userId: user.uid
       })
+      setFresh(false)
     } else {
       setAdminInfo({
         isAdmin: false,

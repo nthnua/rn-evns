@@ -9,9 +9,7 @@ export default function AdminSignIn ({ }) {
   const [show, setShow] = useState(false)
 
   const handleLogin = () => {
-    signIn(email, password).then(userCreds => {
-      console.log(userCreds.user.uid)
-    }).catch(err => console.error(err))
+    signIn(email, password).catch(err => console.error(err))
   }
 
   return (
