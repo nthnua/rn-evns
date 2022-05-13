@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app'
 import { onSnapshot, query, addDoc, collection, doc, getFirestore, where, getDocs, updateDoc, arrayUnion, arrayRemove, getDoc } from 'firebase/firestore'
+import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -17,6 +18,36 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
+const auth = getAuth(app)
+
+export function signUp() {
+  createUserWithEmailAndPassword(auth, 'test@nullish.tech', 'testpwd')
+    .then(data => console.log(data)).catch(err => console.error(err))
+}
+export function signIn(email, password) {
+  const auth = getAuth();
+  return signInWithEmailAndPassword(auth, email, password)
+}
+export function atchSignIn(setFresh, setAdminInfo) {
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      setFresh(false)
+      setAdminInfo({
+        isAdmin: true,
+        userId: user.uid
+      })
+    }
+    else {
+      setAdminInfo({
+        isAdmin: false,
+        userId: ''
+      })
+    }
+  })
+}
+export function signOutAdmin() {
+  signOut(auth)
+}
 
 export async function addUser(userId, name, type, subscriptions) {
   try {

@@ -25,7 +25,7 @@ export default function ({ subdChnls, setSubdChnls }) {
   }, [])
   const Channels = channels.map(chnl => <Box
     marginY='2' alignItems='center' key={chnl.get('id')}
-                                        >
+  >
     <Checkbox colorScheme='blue' value={chnl.get('id')}>
       <Box
         maxW='full' rounded='lg' overflow='hidden' borderColor='coolGray.200' borderWidth='1' _dark={{
@@ -62,14 +62,14 @@ export default function ({ subdChnls, setSubdChnls }) {
             >
 
               {
-                                chnl.get('fullname')
-                            }
+                chnl.get('fullname')
+              }
             </Text>
           </Stack>
         </Stack>
       </Box>
     </Checkbox>
-                                        </Box>)
+  </Box>)
   return (
     <ScrollView
       maxW='full' h='80' _contentContainerStyle={{
@@ -89,7 +89,7 @@ export default function ({ subdChnls, setSubdChnls }) {
             onPress={() => {
               console.log(groupValues)
               setSubdChnls([...subdChnls, ...groupValues])
-              navigation.navigate('Home')
+              navigation.navigate('UserHome')
             }}
           />
         </Box>}

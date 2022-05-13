@@ -29,8 +29,7 @@ export default function ({ adminId }) {
         setImgUrl('')
         setInfoUrls('')
       }).catch(err => console.error(err))
-    }
-    else {
+    } else {
       setInputError(true)
     }
   }
@@ -97,7 +96,7 @@ export default function ({ adminId }) {
             }} _dark={{
               color: 'green.400'
             }} fontWeight='bold' ml='-0.5' mt='-1'
-          >
+                                            >
             {url}
           </Text>)}
           <Text fontWeight='bold'>
@@ -111,7 +110,7 @@ export default function ({ adminId }) {
             }} _dark={{
               color: 'green.400'
             }} fontWeight='bold' ml='-0.5' mt='-1'
-          >
+                                                    >
             {contact}
           </Text>)}
         </Stack>
@@ -132,7 +131,7 @@ export default function ({ adminId }) {
         : <Box safeAreaTop='8' safeAreaBottom='8'>
           {Posts}
           <Box alignItems='center' w='100%'>
-            <TextArea rounded='lg' h={10} isRequired={true} placeholder='Title' w='100%' value={title} onChangeText={(e) => setTitle(e)} />
+            <TextArea rounded='lg' h={10} isRequired placeholder='Title' w='100%' value={title} onChangeText={(e) => setTitle(e)} />
           </Box>
           <Box alignItems='center' w='100%'>
             <TextArea rounded='lg' h={20} placeholder='Body' value={body} onChangeText={(e) => setBody(e)} w='100%' />
@@ -147,9 +146,9 @@ export default function ({ adminId }) {
             <TextArea rounded='lg' h={20} placeholder='Registration/Info URLs' w='100%' value={infoUrls} onChangeText={(e) => setInfoUrls(e)} />
           </Box>
           <Button rounded='lg' onPress={handleSend} colorScheme={inputError ? 'error' : 'info'} my='2'>
-            {inputError ? 'Fill all the fields properly' : 'Send'}</Button>
-        </Box>
-      }
-    </ScrollView >
+            {inputError ? 'Fill all the fields properly' : 'Send'}
+          </Button>
+        </Box>}
+    </ScrollView>
   )
 }
