@@ -18,7 +18,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
 
-export async function addUser (userId, name, type, subscriptions) {
+export async function addUser(userId, name, type, subscriptions) {
   try {
     await addDoc(collection(getFirestore(), 'users', '1'), {
       name,
@@ -30,12 +30,12 @@ export async function addUser (userId, name, type, subscriptions) {
     console.error(e)
   }
 }
-export function getChannels (chnls) {
+export function getChannels(chnls) {
   const chnlRef = collection(db, 'channels')
   const chnlQuery = query(chnlRef, where('id', 'in', chnls))
   return getDocs(chnlQuery)
 }
-export function getAdminChannels (userId) {
+export function getAdminChannels(userId) {
   const userRef = doc(db, 'admins', `${userId}`)
   return getDoc(userRef).then(userSnap => {
     const chnlRef = collection(db, 'channels')
@@ -43,29 +43,29 @@ export function getAdminChannels (userId) {
     return getDocs(chnlQuery)
   }).catch(err => console.error(err))
 }
-export function getNotSubscribedChannels (chnls) {
+export function getNotSubscribedChannels(chnls) {
   const chnlRef = collection(db, 'channels')
   const chnlQuery = query(chnlRef, where('id', 'not-in', [...chnls]))
   return getDocs(chnlQuery)
 }
-export function getAllChnnels () {
+export function getAllChnnels() {
   const chnlRef = collection(db, 'channels')
   const chnlQuery = query(chnlRef)
   return getDocs(chnlQuery)
 }
-export function subscribeToChannel (userId, chnlIds) {
+export function subscribeToChannel(userId, chnlIds) {
   const userRef = doc(db, 'users', `${userId}`)
   return updateDoc(userRef, {
     subscriptions: arrayUnion(...chnlIds)
   })
 }
-export function removeSubscriptions (userId, chnlId) {
+export function removeSubscriptions(userId, chnlId) {
   const userRef = doc(db, 'users', `${userId}`)
   return updateDoc(userRef, {
     subscriptions: arrayRemove(chnlId)
   })
 }
-export function getPosts (chnlId) {
+export function getPosts(chnlId) {
   const chnlRef = collection(db, 'channels')
   const chnlQuery = query(chnlRef, where('id', '==', `${chnlId}`))
   return getDocs(chnlQuery).then(qs => {
@@ -75,26 +75,24 @@ export function getPosts (chnlId) {
   }).catch(err => console.error(err))
 }
 
-export function subscribe (chnlId, setPosts, setLoading) {
+export function subscribe(chnlId, setPosts, setLoading) {
   const q = query(collection(db, 'posts'), where('channelId', '==', `${chnlId}`))
   return onSnapshot(q, (postsSnap) => {
     setPosts(postsSnap.docs)
     setLoading(false)
   })
 }
-export function sendMessage (channelId, adminId, body, title, contactsString, infoUrls, imgUrl) {
+export function sendMessage(channelId, adminId, body, title, contacts, urls, imgUrl) {
   const adminRef = doc(db, 'admins', `${adminId}`)
   return getDoc(adminRef).then(adminSnap => {
     const author = adminSnap.get('name')
-    const urls = infoUrls.split('\n')
-    const contacts = contactsString.split('\n')
     return addDoc(collection(db, 'posts'), {
       channelId,
       author,
       body,
       title,
       contacts,
-      id: Math.ceil(Math.random(1000000000)),
+      id: Math.ceil(Math.random() * 100000000000),
       time: Date.now(),
       imgUrl,
       urls

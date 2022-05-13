@@ -1,4 +1,4 @@
-import { AspectRatio, Box, Button, Heading, Image, Input, ScrollView, Stack, Text, TextArea } from 'native-base'
+import { AspectRatio, Box, Button, FormControl, Heading, Image, Input, ScrollView, Stack, Text, TextArea, WarningOutlineIcon } from 'native-base'
 import { useEffect, useState } from 'react'
 import LoadingScreen from '../Channels/LoadingScreen'
 import { getPosts, sendMessage, subscribe } from '../firebase'
@@ -13,12 +13,26 @@ export default function ({ adminId }) {
   const [contacts, setContacts] = useState('')
   const [imgUrl, setImgUrl] = useState('')
   const [infoUrls, setInfoUrls] = useState('')
+  const [inputError, setInputError] = useState(false)
 
   const route = useRoute()
   const { chnlId } = route.params
   const handleSend = () => {
-    console.log(infoUrls)
-    sendMessage(chnlId, adminId, body, title, contacts, infoUrls, imgUrl).then().catch(err => console.error(err))
+    if (title && body && contacts && imgUrl && infoUrls) {
+      const urls = infoUrls.split('\n').map(url => url !== '' ? 'http://' + url : null)
+      const contactsArray = contacts.split('\n')
+      const imageUrl = 'http://' + imgUrl
+      sendMessage(chnlId, adminId, body, title, contactsArray, urls, imageUrl).then((data) => {
+        setBody('')
+        setTitle('')
+        setContacts('')
+        setImgUrl('')
+        setInfoUrls('')
+      }).catch(err => console.error(err))
+    }
+    else {
+      setInputError(true)
+    }
   }
 
   useEffect(() => {
@@ -83,7 +97,7 @@ export default function ({ adminId }) {
             }} _dark={{
               color: 'green.400'
             }} fontWeight='bold' ml='-0.5' mt='-1'
-                                            >
+          >
             {url}
           </Text>)}
           <Text fontWeight='bold'>
@@ -97,7 +111,7 @@ export default function ({ adminId }) {
             }} _dark={{
               color: 'green.400'
             }} fontWeight='bold' ml='-0.5' mt='-1'
-                                                    >
+          >
             {contact}
           </Text>)}
         </Stack>
@@ -118,7 +132,7 @@ export default function ({ adminId }) {
         : <Box safeAreaTop='8' safeAreaBottom='8'>
           {Posts}
           <Box alignItems='center' w='100%'>
-            <TextArea rounded='lg' h={10} placeholder='Title' w='100%' value={title} onChangeText={(e) => setTitle(e)} />
+            <TextArea rounded='lg' h={10} isRequired={true} placeholder='Title' w='100%' value={title} onChangeText={(e) => setTitle(e)} />
           </Box>
           <Box alignItems='center' w='100%'>
             <TextArea rounded='lg' h={20} placeholder='Body' value={body} onChangeText={(e) => setBody(e)} w='100%' />
@@ -132,8 +146,10 @@ export default function ({ adminId }) {
           <Box alignItems='center' w='100%'>
             <TextArea rounded='lg' h={20} placeholder='Registration/Info URLs' w='100%' value={infoUrls} onChangeText={(e) => setInfoUrls(e)} />
           </Box>
-          <Button rounded='lg' onPress={handleSend} my='2'>Send</Button>
-        </Box>}
-    </ScrollView>
+          <Button rounded='lg' onPress={handleSend} colorScheme={inputError ? 'error' : 'info'} my='2'>
+            {inputError ? 'Fill all the fields properly' : 'Send'}</Button>
+        </Box>
+      }
+    </ScrollView >
   )
 }
