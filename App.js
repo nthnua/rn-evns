@@ -23,13 +23,14 @@ export default function App() {
   const [fresh, setFresh] = useState(true)
   useEffect(() => {
     AsyncStorage.getItem('subscriptions').then(subscriptions => {
-      const subs = JSON.parse(subscriptions)
-      if (subs.length >= 0) {
-        setSubdChnls(subs)
+      if (subscriptions !== null) {
+        setSubdChnls(JSON.parse(subscriptions))
       }
     }).catch(err => console.error(err))
     AsyncStorage.getItem('userInfo').then(userInfo => {
-      setUserInfo(JSON.parse(userInfo))
+      if (useState !== null) {
+        setUserInfo(JSON.parse(userInfo))
+      }
     }).catch(err => console.error(err))
     AsyncStorage.getItem('fresh').then(fr => {
       setFresh(JSON.parse(fr))
@@ -79,7 +80,7 @@ export default function App() {
                 </>
               )
               : (
-                userInfo.isAdmin
+                userInfo?.isAdmin
                   ? (
                     <>
                       <Stack.Screen
