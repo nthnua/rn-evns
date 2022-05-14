@@ -13,7 +13,7 @@ export default function ({ route, navigation }) {
     return unsub
   }, [])
 
-  const Posts = posts.map(post => <Box marginY='2' alignItems='center' key={post.get('id')}>
+  const Posts = posts.map(post => <Box marginY='2' alignItems='center' key={post.id}>
     <Box
       maxW='full' rounded='lg' overflow='hidden' borderColor='coolGray.200' borderWidth='1' _dark={{
         borderColor: 'coolGray.600',

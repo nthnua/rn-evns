@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app'
-import { onSnapshot, query, addDoc, collection, doc, getFirestore, where, getDocs, updateDoc, arrayUnion, arrayRemove, getDoc, orderBy } from 'firebase/firestore'
+import { onSnapshot, query, addDoc, collection, doc, getFirestore, where, getDocs, updateDoc, arrayUnion, arrayRemove, getDoc, orderBy, deleteDoc } from 'firebase/firestore'
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -20,15 +20,15 @@ const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
 const auth = getAuth(app)
 
-export function signUp() {
+export function signUp () {
   createUserWithEmailAndPassword(auth, 'test@nullish.tech', 'testpwd')
     .then(data => console.log(data)).catch(err => console.error(err))
 }
-export function signIn(email, password) {
+export function signIn (email, password) {
   const auth = getAuth()
   return signInWithEmailAndPassword(auth, email, password)
 }
-export function atchSignIn(setFresh, setAdminInfo) {
+export function atchSignIn (setFresh, setAdminInfo) {
   onAuthStateChanged(auth, user => {
     if (user) {
       setAdminInfo({
@@ -44,11 +44,11 @@ export function atchSignIn(setFresh, setAdminInfo) {
     }
   })
 }
-export function signOutAdmin() {
+export function signOutAdmin () {
   signOut(auth)
 }
 
-export async function addUser(userId, name, type, subscriptions) {
+export async function addUser (userId, name, type, subscriptions) {
   try {
     await addDoc(collection(getFirestore(), 'users', '1'), {
       name,
@@ -60,12 +60,12 @@ export async function addUser(userId, name, type, subscriptions) {
     console.error(e)
   }
 }
-export function getChannels(chnls) {
+export function getChannels (chnls) {
   const chnlRef = collection(db, 'channels')
   const chnlQuery = query(chnlRef, where('id', 'in', chnls))
   return getDocs(chnlQuery)
 }
-export function getAdminChannels(userId) {
+export function getAdminChannels (userId) {
   const userRef = doc(db, 'admins', `${userId}`)
   return getDoc(userRef).then(userSnap => {
     const chnlRef = collection(db, 'channels')
@@ -73,29 +73,29 @@ export function getAdminChannels(userId) {
     return getDocs(chnlQuery)
   }).catch(err => console.error(err))
 }
-export function getNotSubscribedChannels(chnls) {
+export function getNotSubscribedChannels (chnls) {
   const chnlRef = collection(db, 'channels')
   const chnlQuery = query(chnlRef, where('id', 'not-in', [...chnls]))
   return getDocs(chnlQuery)
 }
-export function getAllChnnels() {
+export function getAllChnnels () {
   const chnlRef = collection(db, 'channels')
   const chnlQuery = query(chnlRef)
   return getDocs(chnlQuery)
 }
-export function subscribeToChannel(userId, chnlIds) {
+export function subscribeToChannel (userId, chnlIds) {
   const userRef = doc(db, 'users', `${userId}`)
   return updateDoc(userRef, {
     subscriptions: arrayUnion(...chnlIds)
   })
 }
-export function removeSubscriptions(userId, chnlId) {
+export function removeSubscriptions (userId, chnlId) {
   const userRef = doc(db, 'users', `${userId}`)
   return updateDoc(userRef, {
     subscriptions: arrayRemove(chnlId)
   })
 }
-export function getPosts(chnlId) {
+export function getPosts (chnlId) {
   const chnlRef = collection(db, 'channels')
   const chnlQuery = query(chnlRef, where('id', '==', `${chnlId}`))
   return getDocs(chnlQuery).then(qs => {
@@ -105,7 +105,7 @@ export function getPosts(chnlId) {
   }).catch(err => console.error(err))
 }
 
-export function subscribe(chnlId, setPosts, setLoading) {
+export function subscribe (chnlId, setPosts, setLoading) {
   const q = query(collection(db, 'posts'), where('channelId', '==', `${chnlId}`), orderBy('time'))
   return onSnapshot(q, (postsSnap) => {
     setPosts(postsSnap.docs)
@@ -114,7 +114,7 @@ export function subscribe(chnlId, setPosts, setLoading) {
     console.error(err)
   })
 }
-export function sendMessage(channelId, adminId, body, title, contacts, urls, imgUrl) {
+export function sendMessage (channelId, adminId, body, title, contacts, urls, imgUrl) {
   const adminRef = doc(db, 'admins', `${adminId}`)
   return getDoc(adminRef).then(adminSnap => {
     const author = adminSnap.get('name')
@@ -124,10 +124,13 @@ export function sendMessage(channelId, adminId, body, title, contacts, urls, img
       body,
       title,
       contacts,
-      id: Math.ceil(Math.random() * 100000000000),
       time: Date.now(),
       imgUrl,
       urls
     })
   }).catch(err => console.error(err))
+}
+export function deleteMessage (messageId) {
+  const messageRef = doc(db, 'posts', `${messageId}`)
+  return deleteDoc(messageRef)
 }

@@ -1,7 +1,7 @@
-import { AspectRatio, Box, Button, Heading, Image, ScrollView, Stack, Text, TextArea } from 'native-base'
+import { Actionsheet, AspectRatio, Box, Button, Heading, Image, Pressable, ScrollView, Stack, Text, TextArea, useDisclose } from 'native-base'
 import { useEffect, useState } from 'react'
 import LoadingScreen from '../Channels/LoadingScreen'
-import { sendMessage, subscribe } from '../firebase'
+import { deleteMessage, sendMessage, subscribe } from '../firebase'
 import { Linking } from 'react-native'
 import { useRoute } from '@react-navigation/native'
 
@@ -14,6 +14,12 @@ export default function ({ adminId }) {
   const [imgUrl, setImgUrl] = useState('')
   const [infoUrls, setInfoUrls] = useState('')
   const [inputError, setInputError] = useState(false)
+  const [currentLongPress, setCurrentLongPress] = useState('')
+  const {
+    isOpen,
+    onOpen,
+    onClose
+  } = useDisclose()
 
   const route = useRoute()
   const { chnlId } = route.params
@@ -38,7 +44,12 @@ export default function ({ adminId }) {
     const unsub = subscribe(chnlId, setPosts, setLoading)
     return unsub
   }, [])
-  const Posts = posts.map(post => <Box marginY='2' alignItems='center' key={post.get('id')}>
+  useEffect(() => {
+    if (currentLongPress) {
+      onOpen()
+    }
+  }, [currentLongPress])
+  const Posts = posts.map(post => <Pressable onLongPress={() => setCurrentLongPress(post.id)} marginY='2' alignItems='center' key={post.id}>
     <Box
       maxW='full' rounded='lg' overflow='hidden' borderColor='coolGray.200' borderWidth='1' _dark={{
         borderColor: 'coolGray.600',
@@ -96,7 +107,7 @@ export default function ({ adminId }) {
             }} _dark={{
               color: 'green.400'
             }} fontWeight='bold' ml='-0.5' mt='-1'
-          >
+                                            >
             {url}
           </Text>)}
           <Text fontWeight='bold'>
@@ -110,13 +121,13 @@ export default function ({ adminId }) {
             }} _dark={{
               color: 'green.400'
             }} fontWeight='bold' ml='-0.5' mt='-1'
-          >
+                                                    >
             {contact}
           </Text>)}
         </Stack>
       </Stack>
     </Box>
-  </Box>
+  </Pressable>
   )
   return (
     <ScrollView
@@ -128,30 +139,53 @@ export default function ({ adminId }) {
     >
       {loading
         ? <LoadingScreen />
-        : <Box safeAreaTop='8' safeAreaBottom='8'>
-          {Posts}
-          <Box my='2'>
-            <Text fontSize='xl' fontFamily='heading'>New Post:</Text>
-            <Box alignItems='center' w='100%'>
-              <TextArea rounded='lg' h={10} isRequired placeholder='Title' w='100%' value={title} onChangeText={(e) => setTitle(e)} />
+        : <>
+          <Box safeAreaTop='8' safeAreaBottom='8'>
+            {Posts}
+            <Box my='2'>
+              <Text fontSize='xl' fontFamily='heading'>New Post:</Text>
+              <Box alignItems='center' w='100%'>
+                <TextArea rounded='lg' h={10} isRequired placeholder='Title' w='100%' value={title} onChangeText={(e) => setTitle(e)} />
+              </Box>
+              <Box alignItems='center' w='100%'>
+                <TextArea rounded='lg' h={20} placeholder='Body' value={body} onChangeText={(e) => setBody(e)} w='100%' />
+              </Box>
+              <Box alignItems='center' w='100%'>
+                <TextArea rounded='lg' h={20} placeholder='Contacts' value={contacts} onChangeText={(e) => setContacts(e)} w='100%' />
+              </Box>
+              <Box alignItems='center' w='100%'>
+                <TextArea rounded='lg' h={10} placeholder='Image URL' w='100%' value={imgUrl} onChangeText={(e) => setImgUrl(e)} />
+              </Box>
+              <Box alignItems='center' w='100%'>
+                <TextArea rounded='lg' h={20} placeholder='Registration/Info URLs' w='100%' value={infoUrls} onChangeText={(e) => setInfoUrls(e)} />
+              </Box>
+              <Button rounded='lg' onPress={handleSend} colorScheme={inputError ? 'error' : 'info'} my='2'>
+                {inputError ? 'Fill all the fields properly' : 'Send'}
+              </Button>
             </Box>
-            <Box alignItems='center' w='100%'>
-              <TextArea rounded='lg' h={20} placeholder='Body' value={body} onChangeText={(e) => setBody(e)} w='100%' />
-            </Box>
-            <Box alignItems='center' w='100%'>
-              <TextArea rounded='lg' h={20} placeholder='Contacts' value={contacts} onChangeText={(e) => setContacts(e)} w='100%' />
-            </Box>
-            <Box alignItems='center' w='100%'>
-              <TextArea rounded='lg' h={10} placeholder='Image URL' w='100%' value={imgUrl} onChangeText={(e) => setImgUrl(e)} />
-            </Box>
-            <Box alignItems='center' w='100%'>
-              <TextArea rounded='lg' h={20} placeholder='Registration/Info URLs' w='100%' value={infoUrls} onChangeText={(e) => setInfoUrls(e)} />
-            </Box>
-            <Button rounded='lg' onPress={handleSend} colorScheme={inputError ? 'error' : 'info'} my='2'>
-              {inputError ? 'Fill all the fields properly' : 'Send'}
-            </Button>
           </Box>
-        </Box>}
+          <Actionsheet isOpen={isOpen} onClose={onClose}>
+            <Actionsheet.Content>
+              <Box w='100%' h={60} px={4} justifyContent='center'>
+                <Text
+                  fontSize='16' color='gray.500' _dark={{
+                    color: 'gray.300'
+                  }}
+                >
+                  Options
+                </Text>
+              </Box>
+              <Actionsheet.Item onPress={() => {
+                deleteMessage(currentLongPress).then(() => {
+                  onClose()
+                }).catch(err => console.error(err))
+              }}
+              >Delete
+              </Actionsheet.Item>
+              <Actionsheet.Item>Cancel</Actionsheet.Item>
+            </Actionsheet.Content>
+          </Actionsheet>
+        </>}
     </ScrollView>
   )
 }

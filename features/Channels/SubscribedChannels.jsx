@@ -93,9 +93,13 @@ export default function ({ subdChnls, setSubdChnls }) {
         ? <LoadingScreen />
         : <>
           <Box safeAreaTop='8' safeAreaBottom='8'>
-            {Channels.length > 0 ? Channels : <Box w='full' >
-              <Text fontSize='3xl' fontFamily='heading' fontWeight='bold' color='gray.500' >Subscribe to channels using
-                <Text color='primary.200' > + Button below </Text></Text></Box>}
+            {Channels.length > 0
+              ? Channels
+              : <Box w='full'>
+                <Text fontSize='3xl' fontFamily='heading' fontWeight='bold' color='gray.500'>Subscribe to channels using
+                  <Text color='primary.200'> + Button below </Text>
+                </Text>
+              </Box>}
             <Actionsheet isOpen={isOpen} onClose={onClose}>
               <Actionsheet.Content>
                 <Box w='100%' h={60} px={4} justifyContent='center'>
@@ -118,7 +122,8 @@ export default function ({ subdChnls, setSubdChnls }) {
               </Actionsheet.Content>
             </Actionsheet>
           </Box>
-          <Fab my='4'
+          <Fab
+            my='4'
             renderInPortal={false} shadow={2} placement='bottomRight' size='sm' icon={<Icon color='white' as={MaterialIcons} name='add' size='sm' />}
             onPress={() => {
               navigation.navigate('AddChannels')

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { signIn } from '../firebase'
 
-export default function AdminSignIn({ }) {
+export default function AdminSignIn ({ }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [show, setShow] = useState(false)
@@ -21,8 +21,7 @@ export default function AdminSignIn({ }) {
           setLoading(false)
           setInputError(true)
         })
-    }
-    else {
+    } else {
       setInputError(true)
     }
   }
@@ -31,8 +30,8 @@ export default function AdminSignIn({ }) {
     <Flex alignItems='center' justifyContent='center' h='full' w='full'>
       <Box bgColor='white' rounded='lg' safeArea='8'>
         <Box mb='10'>
-          <Text fontSize='3xl' fontFamily='heading' fontWeight='bold' color='primary.200' >Sign In,</Text>
-          <Text fontSize='3xl' fontFamily='heading' fontWeight='bold' color='gray.500' >To Continue</Text>
+          <Text fontSize='3xl' fontFamily='heading' fontWeight='bold' color='primary.200'>Sign In,</Text>
+          <Text fontSize='3xl' fontFamily='heading' fontWeight='bold' color='gray.500'>To Continue</Text>
         </Box>
         <Stack space={4} w='100%' alignItems='center'>
           <Input
@@ -49,13 +48,15 @@ export default function AdminSignIn({ }) {
             }} type={show ? 'text' : 'password'} InputRightElement={<Icon
               as={<MaterialIcons name={show ? 'visibility' : 'visibility-off'} />}
               size={5} mr='2' color='muted.400' onPress={() => setShow(!show)}
-            />} placeholder='Password' value={password}
+                                                                    />} placeholder='Password' value={password}
             onChangeText={text => setPassword(text)}
           />
-          <Button colorScheme={inputError ? 'error' : 'primary'} isLoading={loading} isLoadingText='Logging in...' rounded='full' onPress={handleLogin}>{inputError ? 'Enter your details properly and retry'
-            : 'Log In'}</Button>
+          <Button colorScheme={inputError ? 'error' : 'primary'} isLoading={loading} isLoadingText='Logging in...' rounded='full' onPress={handleLogin}>{inputError
+            ? 'Enter your details properly and retry'
+            : 'Log In'}
+          </Button>
         </Stack>
       </Box>
-    </Flex >
+    </Flex>
   )
 }
