@@ -67,11 +67,11 @@ export default function ({ route, navigation }) {
             key={url + i}
             onPress={() => Linking.openURL(`${url}`)}
             fontSize='xs' _light={{
-              color: 'green.500'
+              color: 'primary.300'
             }} _dark={{
-              color: 'green.400'
+              color: 'primary.200'
             }} fontWeight='bold' ml='-0.5' mt='-1'
-                                            >
+          >
             {url}
           </Text>)}
           <Text fontWeight='bold'>
@@ -81,11 +81,11 @@ export default function ({ route, navigation }) {
             key={contact + i}
             onPress={() => Linking.openURL(`tel:${contact}`)}
             fontSize='xs' _light={{
-              color: 'green.500'
+              color: 'primary.300'
             }} _dark={{
-              color: 'green.400'
+              color: 'primary.200'
             }} fontWeight='bold' ml='-0.5' mt='-1'
-                                                    >
+          >
             {contact}
           </Text>)}
         </Stack>

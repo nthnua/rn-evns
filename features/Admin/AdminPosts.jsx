@@ -130,9 +130,9 @@ export default function ({ adminId }) {
             key={url + i}
             onPress={() => Linking.openURL(`${url}`)}
             fontSize='xs' _light={{
-              color: 'green.500'
+              color: 'primary.300'
             }} _dark={{
-              color: 'green.400'
+              color: 'primary.200'
             }} fontWeight='bold' ml='-0.5' mt='-1'
           >
             {url}
@@ -144,9 +144,9 @@ export default function ({ adminId }) {
             key={contact + i}
             onPress={() => Linking.openURL(`tel:${contact}`)}
             fontSize='xs' _light={{
-              color: 'green.500'
+              color: 'primary.300'
             }} _dark={{
-              color: 'green.400'
+              color: 'primary.200'
             }} fontWeight='bold' ml='-0.5' mt='-1'
           >
             {contact}
@@ -158,7 +158,7 @@ export default function ({ adminId }) {
   )
   const NewPost = (<>
     <Flex my='2' bg='white' rounded='lg' p='4' justify={'space-evenly'}>
-      <Text fontSize='xl' fontFamily='heading' color='gray.500'>New Post:</Text>
+      <Text fontSize='xl' fontFamily='heading' fontWeight='bold' color='gray.500'>New <Text color={'primary.200'}>Post</Text>:</Text>
       <Box alignItems='center' w='100%'>
         <TextArea rounded='lg' h={10} isRequired placeholder='Title' w='100%' value={title} onChangeText={(e) => setTitle(e)} />
       </Box>

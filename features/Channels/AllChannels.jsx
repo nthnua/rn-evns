@@ -1,4 +1,4 @@
-import { AspectRatio, Box, Checkbox, Fab, Heading, Icon, Image, ScrollView, Stack, Text } from 'native-base'
+import { AspectRatio, Box, Checkbox, Fab, Flex, Heading, Icon, Image, ScrollView, Stack, Text } from 'native-base'
 import { useEffect, useState } from 'react'
 import { getAllChnnels, getNotSubscribedChannels } from '../firebase'
 import LoadingScreen from './LoadingScreen'
@@ -23,10 +23,10 @@ export default function ({ subdChnls, setSubdChnls }) {
       }).catch(err => console.error(err))
     }
   }, [])
-  const Channels = channels.map(chnl => <Box
-    marginY='2' alignItems='center' key={chnl.get('id')}
-                                        >
-    <Checkbox colorScheme='blue' value={chnl.get('id')}>
+  const Channels = channels.map(chnl => <Flex
+    my='2' mx='4' align='center' key={chnl.get('id')}
+  >
+    <Checkbox colorScheme='primary' value={chnl.get('id')}>
       <Box
         maxW='full' rounded='lg' overflow='hidden' borderColor='coolGray.200' borderWidth='1' _dark={{
           borderColor: 'coolGray.600',
@@ -55,9 +55,9 @@ export default function ({ subdChnls, setSubdChnls }) {
             </Heading>
             <Text
               fontSize='xs' _light={{
-                color: 'violet.500'
+                color: 'primary.500'
               }} _dark={{
-                color: 'violet.400'
+                color: 'primary.400'
               }} fontWeight='500' ml='-0.5' mt='-1'
             >
 
@@ -65,11 +65,14 @@ export default function ({ subdChnls, setSubdChnls }) {
                 chnl.get('fullname')
               }
             </Text>
+            <Text color='gray.400'>
+              {chnl.get('desc')}
+            </Text>
           </Stack>
         </Stack>
       </Box>
     </Checkbox>
-  </Box>)
+  </Flex>)
   return (
     <ScrollView
       maxW='full' h='80' _contentContainerStyle={{

@@ -13,7 +13,7 @@ export default function () {
           }}
         >
           <Skeleton h='32' startColor='gray.50' />
-          <Skeleton.Text px='4' startColor='violet.200' />
+          <Skeleton.Text px='4' startColor='primary.200' />
           <Spacer />
         </VStack>
       </Center>
@@ -27,7 +27,7 @@ export default function () {
           }}
         >
           <Skeleton h='32' startColor='grey.50' />
-          <Skeleton.Text px='4' startColor='violet.200' />
+          <Skeleton.Text px='4' startColor='primary.200' />
           <Spacer />
         </VStack>
       </Center>

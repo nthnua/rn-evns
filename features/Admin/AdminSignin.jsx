@@ -3,7 +3,7 @@ import { useState } from 'react'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { signIn } from '../firebase'
 
-export default function AdminSignIn ({ }) {
+export default function AdminSignIn({ }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [show, setShow] = useState(false)
@@ -38,7 +38,7 @@ export default function AdminSignIn ({ }) {
             w={{
               base: '75%',
               md: '25%'
-            }} InputLeftElement={<Icon as={<MaterialIcons name='email' />} size={5} ml='2' color='muted.400' />}
+            }} InputLeftElement={<Icon as={<MaterialIcons name='email' />} size={5} ml='2' color='primary.400' />}
             placeholder='Email' value={email} onChangeText={text => setEmail(text)}
           />
           <Input
@@ -47,8 +47,8 @@ export default function AdminSignIn ({ }) {
               md: '25%'
             }} type={show ? 'text' : 'password'} InputRightElement={<Icon
               as={<MaterialIcons name={show ? 'visibility' : 'visibility-off'} />}
-              size={5} mr='2' color='muted.400' onPress={() => setShow(!show)}
-                                                                    />} placeholder='Password' value={password}
+              size={5} mr='2' color='primary.400' onPress={() => setShow(!show)}
+            />} placeholder='Password' value={password}
             onChangeText={text => setPassword(text)}
           />
           <Button colorScheme={inputError ? 'error' : 'primary'} isLoading={loading} isLoadingText='Logging in...' rounded='full' onPress={handleLogin}>{inputError

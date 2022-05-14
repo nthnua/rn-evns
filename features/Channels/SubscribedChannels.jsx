@@ -70,9 +70,9 @@ export default function ({ subdChnls, setSubdChnls }) {
             </Heading>
             <Text
               fontSize='xs' _light={{
-                color: 'violet.500'
+                color: 'primary.500'
               }} _dark={{
-                color: 'violet.400'
+                color: 'primary.400'
               }} fontWeight='500' ml='-0.5' mt='-1'
             >
               {chnl.get('fullname')}
