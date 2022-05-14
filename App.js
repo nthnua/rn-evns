@@ -12,8 +12,9 @@ import Welcome from './features/Welcome/Welcome'
 import AdminSignIn from './features/Admin/AdminSignin'
 import { atchSignIn, signOutAdmin } from './features/firebase'
 import AllChannels from './features/Channels/AllChannels'
+import theme from './theme'
 
-export default function App () {
+export default function App() {
   const [subdChnls, setSubdChnls] = useState([])
   const [userInfo, setUserInfo] = useState({
     isAdmin: false,
@@ -54,7 +55,7 @@ export default function App () {
 
   return (
     <NavigationContainer>
-      <NativeBaseProvider>
+      <NativeBaseProvider theme={theme}>
         <Stack.Navigator>
           {
             fresh
@@ -64,7 +65,7 @@ export default function App () {
                     name='Welcome' options={{
                       headerRight: () => (
                         <Button
-                          colorScheme='info'
+                          variant='ghost'
                           onPress={() => {
                             setFresh(false)
                           }}
@@ -75,39 +76,41 @@ export default function App () {
                     }} children={() => <Welcome setFresh={setFresh} />}
                   />
                 </>
-                )
+              )
               : (
-                  userInfo.isAdmin
-                    ? (
-                      <>
-                        <Stack.Screen
-                          name='AdminHome' options={{
-                            headerRight: () => (
-                              <Button
-                                onPress={() => {
-                                  signOutAdmin()
-                                }}
-                              >
-                                Sign Out
-                              </Button>
-                            )
-                          }} children={() => <AdminChannels userId={userInfo.userId} />}
-                        />
-                        <Stack.Screen
-                          name='AdminPosts' options={({ route }) => ({
-                            title: route.params.chnlName
-                          })} children={() => <AdminPosts adminId={userInfo.userId} />}
-                        />
-                      </>
-                      )
-                    : (
-                      <>
-                        <Stack.Screen
-                          name='UserHome' children={() => <SubscribedChannels subdChnls={subdChnls} setSubdChnls={setSubdChnls} />}
-                          options={
+                userInfo.isAdmin
+                  ? (
+                    <>
+                      <Stack.Screen
+                        name='AdminHome' options={{
+                          headerRight: () => (
+                            <Button
+                              variant='ghost'
+                              onPress={() => {
+                                signOutAdmin()
+                              }}
+                            >
+                              Sign Out
+                            </Button>
+                          )
+                        }} children={() => <AdminChannels userId={userInfo.userId} />}
+                      />
+                      <Stack.Screen
+                        name='AdminPosts' options={({ route }) => ({
+                          title: route.params.chnlName
+                        })} children={() => <AdminPosts adminId={userInfo.userId} />}
+                      />
+                    </>
+                  )
+                  : (
+                    <>
+                      <Stack.Screen
+                        name='UserHome' children={() => <SubscribedChannels subdChnls={subdChnls} setSubdChnls={setSubdChnls} />}
+                        options={
                           {
                             headerRight: () => (
                               <Button
+                                variant='ghost'
                                 onPress={() => {
                                   setFresh(true)
                                 }}
@@ -117,15 +120,15 @@ export default function App () {
                             )
                           }
                         }
-                        />
-                        <Stack.Screen name='AddChannels' children={() => <AllChannels subdChnls={subdChnls} setSubdChnls={setSubdChnls} />} />
-                        <Stack.Screen
-                          name='Posts' component={Posts} options={({ route }) => ({
-                            title: route.params.chnlName
-                          })}
-                        />
-                      </>
-                      ))
+                      />
+                      <Stack.Screen name='AddChannels' children={() => <AllChannels subdChnls={subdChnls} setSubdChnls={setSubdChnls} />} />
+                      <Stack.Screen
+                        name='Posts' component={Posts} options={({ route }) => ({
+                          title: route.params.chnlName
+                        })}
+                      />
+                    </>
+                  ))
           }
           <Stack.Screen
             navigationKey={userInfo.isAdmin ? 'admin' : 'user'}

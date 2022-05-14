@@ -1,9 +1,9 @@
-import { Box, Button, Center, Icon, Input, Stack } from 'native-base'
+import { Box, Button, Center, Flex, Icon, Input, Stack } from 'native-base'
 import { useState } from 'react'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { signIn } from '../firebase'
 
-export default function AdminSignIn ({ }) {
+export default function AdminSignIn({ }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [show, setShow] = useState(false)
@@ -13,7 +13,7 @@ export default function AdminSignIn ({ }) {
   }
 
   return (
-    <Center>
+    <Flex alignItems='center' justifyContent='center' h='full' w='full'>
       <Box bgColor='white' rounded='lg' safeArea='8'>
         <Stack space={4} w='100%' alignItems='center'>
           <Input
@@ -30,12 +30,12 @@ export default function AdminSignIn ({ }) {
             }} type={show ? 'text' : 'password'} InputRightElement={<Icon
               as={<MaterialIcons name={show ? 'visibility' : 'visibility-off'} />}
               size={5} mr='2' color='muted.400' onPress={() => setShow(!show)}
-                                                                    />} placeholder='Password' value={password}
+            />} placeholder='Password' value={password}
             onChangeText={text => setPassword(text)}
           />
           <Button colorScheme='primary' rounded='lg' onPress={handleLogin}>Log In</Button>
         </Stack>
       </Box>
-    </Center>
+    </Flex>
   )
 }
