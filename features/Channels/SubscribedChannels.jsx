@@ -124,7 +124,7 @@ export default function ({ subdChnls, setSubdChnls }) {
           </Box>
           <Fab
             my='4'
-            renderInPortal={false} shadow={2} placement='bottomRight' size='sm' icon={<Icon color='white' as={MaterialIcons} name='add' size='sm' />}
+            renderInPortal={false} shadow={2} placement='' size='sm' icon={<Icon color='white' as={MaterialIcons} name='add' size='sm' />}
             onPress={() => {
               navigation.navigate('AddChannels')
             }}

@@ -25,7 +25,7 @@ export default function ({ subdChnls, setSubdChnls }) {
   }, [])
   const Channels = channels.map(chnl => <Box
     marginY='2' alignItems='center' key={chnl.get('id')}
-                                        >
+  >
     <Checkbox colorScheme='blue' value={chnl.get('id')}>
       <Box
         maxW='full' rounded='lg' overflow='hidden' borderColor='coolGray.200' borderWidth='1' _dark={{
@@ -80,19 +80,23 @@ export default function ({ subdChnls, setSubdChnls }) {
     >
       {loading
         ? <LoadingScreen />
-        : <Box safeAreaTop='8' safeAreaBottom='8'>
-          <Checkbox.Group onChange={setGroupValues} value={groupValues} accessibilityLabel='Select channels'>
-            {Channels}
-          </Checkbox.Group>
+        :
+        <>
+          <Box safeAreaTop='8' safeAreaBottom='8'>
+            <Checkbox.Group onChange={setGroupValues} value={groupValues} accessibilityLabel='Select channels'>
+              {Channels}
+            </Checkbox.Group>
+          </Box>
+
           <Fab
-            renderInPortal={false} shadow={2} size='sm' icon={<Icon color='white' as={MaterialIcons} name='check' size='sm' />}
+            renderInPortal={false} placement='' shadow={2} size='sm' icon={<Icon color='white' as={MaterialIcons} name='check' size='sm' />}
             onPress={() => {
               console.log(groupValues)
               setSubdChnls([...subdChnls, ...groupValues])
               navigation.navigate('UserHome')
             }}
           />
-        </Box>}
+        </>}
 
     </ScrollView>
   )
