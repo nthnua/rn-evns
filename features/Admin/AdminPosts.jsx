@@ -1,9 +1,10 @@
 import { Actionsheet, AspectRatio, Box, Button, Heading, Image, Pressable, ScrollView, Stack, Text, TextArea, useDisclose } from 'native-base'
 import { useEffect, useState } from 'react'
 import LoadingScreen from '../Channels/LoadingScreen'
-import { deleteMessage, sendMessage, subscribe } from '../firebase'
+import { deleteMessage, sendMessage, subscribe, uploadImage } from '../firebase'
 import { Linking } from 'react-native'
 import { useRoute } from '@react-navigation/native'
+import * as ImagePicker from 'expo-image-picker'
 
 export default function ({ adminId }) {
   const [posts, setPosts] = useState([])
@@ -11,10 +12,13 @@ export default function ({ adminId }) {
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
   const [contacts, setContacts] = useState('')
-  const [imgUrl, setImgUrl] = useState('')
   const [infoUrls, setInfoUrls] = useState('')
   const [inputError, setInputError] = useState(false)
   const [currentLongPress, setCurrentLongPress] = useState('')
+  const [updImg, setUpdImg] = useState(null)
+  const [uploading, setUploading] = useState(false)
+  const [sending, setSending] = useState(false)
+
   const {
     isOpen,
     onOpen,
@@ -23,18 +27,41 @@ export default function ({ adminId }) {
 
   const route = useRoute()
   const { chnlId } = route.params
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1
+    }).then(result => {
+      if (!result.cancelled) {
+        setUpdImg(result.uri)
+      }
+    }).catch(err => console.error(err))
+  }
   const handleSend = () => {
-    if (title && body && contacts && imgUrl && infoUrls) {
+    if (title && body && contacts && infoUrls && updImg) {
+      setSending(true)
+      setUploading(true)
       const urls = infoUrls.split('\n').map(url => url !== '' ? 'http://' + url : null)
       const contactsArray = contacts.split('\n')
-      const imageUrl = 'http://' + imgUrl
-      sendMessage(chnlId, adminId, body, title, contactsArray, urls, imageUrl).then((data) => {
-        setBody('')
-        setTitle('')
-        setContacts('')
-        setImgUrl('')
-        setInfoUrls('')
-      }).catch(err => console.error(err))
+      uploadImage(updImg, chnlId).then(imgUrl => {
+        setUploading(false)
+        sendMessage(chnlId, adminId, body, title, contactsArray, urls, imgUrl).then((data) => {
+          setBody('')
+          setTitle('')
+          setContacts('')
+          setInfoUrls('')
+          setSending(false)
+        }).catch(err => {
+          console.error(err)
+          setSending(false)
+        })
+      }).catch(err => {
+        console.error(err)
+        setUploading(false)
+      })
     } else {
       setInputError(true)
     }
@@ -154,15 +181,22 @@ export default function ({ adminId }) {
                 <TextArea rounded='lg' h={20} placeholder='Contacts' value={contacts} onChangeText={(e) => setContacts(e)} w='100%' />
               </Box>
               <Box alignItems='center' w='100%'>
-                <TextArea rounded='lg' h={10} placeholder='Image URL' w='100%' value={imgUrl} onChangeText={(e) => setImgUrl(e)} />
-              </Box>
-              <Box alignItems='center' w='100%'>
                 <TextArea rounded='lg' h={20} placeholder='Registration/Info URLs' w='100%' value={infoUrls} onChangeText={(e) => setInfoUrls(e)} />
               </Box>
-              <Button rounded='lg' onPress={handleSend} colorScheme={inputError ? 'error' : 'info'} my='2'>
-                {inputError ? 'Fill all the fields properly' : 'Send'}
-              </Button>
+              <Box>
+                {!!updImg && <AspectRatio w='full' ratio={4 / 3}>
+                  <Image
+                    rounded='lg' source={{
+                      uri: updImg
+                    }} alt='Uploaded Image'
+                  />
+                </AspectRatio>}
+                <Button rounded='lg' isLoading={uploading} isLoadingText='Uploading...' my='2' onPress={pickImage}>Pick an image from camera roll</Button>
+              </Box>
             </Box>
+            <Button rounded='lg' isLoading={sending} isLoadingText='Sending...' onPress={handleSend} colorScheme={inputError ? 'error' : 'primary'} my='2'>
+              {inputError ? 'Fill all the fields properly' : 'Send'}
+            </Button>
           </Box>
           <Actionsheet isOpen={isOpen} onClose={onClose}>
             <Actionsheet.Content>

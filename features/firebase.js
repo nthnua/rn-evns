@@ -2,6 +2,7 @@
 import { initializeApp } from 'firebase/app'
 import { onSnapshot, query, addDoc, collection, doc, getFirestore, where, getDocs, updateDoc, arrayUnion, arrayRemove, getDoc, orderBy, deleteDoc } from 'firebase/firestore'
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -19,6 +20,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
 const auth = getAuth(app)
+const storage = getStorage(app)
 
 export function signUp () {
   createUserWithEmailAndPassword(auth, 'test@nullish.tech', 'testpwd')
@@ -125,9 +127,19 @@ export function sendMessage (channelId, adminId, body, title, contacts, urls, im
       title,
       contacts,
       time: Date.now(),
-      imgUrl,
-      urls
+      urls,
+      imgUrl
     })
+  }).catch(err => console.error(err))
+}
+export function uploadImage (imgPath, channelId) {
+  const postImgRef = ref(storage, `${channelId}/${Math.ceil(Math.random() * 10000000000000)}`)
+  return fetch(imgPath).then(res => {
+    return res.blob().then(blob => {
+      return uploadBytes(postImgRef, blob).then(res => {
+        return getDownloadURL(postImgRef)
+      }).catch(err => console.error(err))
+    }).catch(err => console.error(err))
   }).catch(err => console.error(err))
 }
 export function deleteMessage (messageId) {
