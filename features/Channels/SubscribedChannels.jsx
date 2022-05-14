@@ -1,4 +1,4 @@
-import { Actionsheet, AspectRatio, Box, Fab, Heading, Icon, Image, Pressable, ScrollView, Stack, Text, useDisclose } from 'native-base'
+import { Actionsheet, AspectRatio, Box, Fab, Heading, Icon, Image, Pressable, ScrollView, Spacer, Stack, Text, useDisclose } from 'native-base'
 import { useEffect, useState } from 'react'
 import { getChannels } from '../firebase'
 import LoadingScreen from './LoadingScreen'
@@ -118,7 +118,7 @@ export default function ({ subdChnls, setSubdChnls }) {
               </Actionsheet.Content>
             </Actionsheet>
           </Box>
-          <Fab
+          <Fab my='4'
             renderInPortal={false} shadow={2} placement='bottomRight' size='sm' icon={<Icon color='white' as={MaterialIcons} name='add' size='sm' />}
             onPress={() => {
               navigation.navigate('AddChannels')

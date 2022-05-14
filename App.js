@@ -92,7 +92,8 @@ export default function App() {
                             >
                               Sign Out
                             </Button>
-                          )
+                          ),
+                          headerTitle: 'Home'
                         }} children={() => <AdminChannels userId={userInfo.userId} />}
                       />
                       <Stack.Screen
@@ -117,7 +118,8 @@ export default function App() {
                               >
                                 Admin?
                               </Button>
-                            )
+                            ),
+                            headerTitle: 'Home'
                           }
                         }
                       />

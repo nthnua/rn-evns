@@ -1,4 +1,4 @@
-import { Box, Button, Center, Flex, Icon, Input, Stack } from 'native-base'
+import { Box, Button, Center, Flex, Icon, Input, Stack, Text } from 'native-base'
 import { useState } from 'react'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { signIn } from '../firebase'
@@ -7,14 +7,33 @@ export default function AdminSignIn({ }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [show, setShow] = useState(false)
+  const [inputError, setInputError] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const handleLogin = () => {
-    signIn(email, password).catch(err => console.error(err))
+    if (email && password) {
+      setLoading(true)
+      signIn(email, password).then(data => {
+        setLoading(false)
+      })
+        .catch(err => {
+          console.error(err)
+          setLoading(false)
+          setInputError(true)
+        })
+    }
+    else {
+      setInputError(true)
+    }
   }
 
   return (
     <Flex alignItems='center' justifyContent='center' h='full' w='full'>
       <Box bgColor='white' rounded='lg' safeArea='8'>
+        <Box mb='10'>
+          <Text fontSize='3xl' fontFamily='heading' fontWeight='bold' color='primary.200' >Sign In,</Text>
+          <Text fontSize='3xl' fontFamily='heading' fontWeight='bold' color='gray.500' >To Continue</Text>
+        </Box>
         <Stack space={4} w='100%' alignItems='center'>
           <Input
             w={{
@@ -33,9 +52,10 @@ export default function AdminSignIn({ }) {
             />} placeholder='Password' value={password}
             onChangeText={text => setPassword(text)}
           />
-          <Button colorScheme='primary' rounded='lg' onPress={handleLogin}>Log In</Button>
+          <Button colorScheme={inputError ? 'error' : 'primary'} isLoading={loading} isLoadingText='Logging in...' rounded='full' onPress={handleLogin}>{inputError ? 'Enter your details properly and retry'
+            : 'Log In'}</Button>
         </Stack>
       </Box>
-    </Flex>
+    </Flex >
   )
 }
