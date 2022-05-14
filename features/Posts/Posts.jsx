@@ -37,7 +37,7 @@ export default function ({ route, navigation }) {
       <Stack p='4' space={3}>
         <Stack space={2}>
           <Heading size='md' ml='-1'>
-            {post.get('name')}
+            {post.get('title')}
           </Heading>
           <Text
             fontSize='xs' _light={{

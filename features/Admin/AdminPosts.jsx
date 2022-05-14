@@ -30,10 +30,11 @@ export default function ({ adminId }) {
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1
+      aspect: [21, 9],
+      exif: false,
+      quality: 0.2
     }).then(result => {
       if (!result.cancelled) {
         setUpdImg(result.uri)
@@ -100,7 +101,7 @@ export default function ({ adminId }) {
       <Stack p='4' space={3}>
         <Stack space={2}>
           <Heading size='md' ml='-1'>
-            {post.get('name')}
+            {post.get('title')}
           </Heading>
           <Text
             fontSize='xs' _light={{
@@ -172,7 +173,7 @@ export default function ({ adminId }) {
         <TextArea rounded='lg' h={20} placeholder='Registration/Info URLs' w='100%' value={infoUrls} onChangeText={(e) => setInfoUrls(e)} />
       </Box>
       <Box>
-        {!!updImg && <AspectRatio w='full' ratio={4 / 3}>
+        {!!updImg && <AspectRatio w='full' ratio={21 / 9}>
           <Image
             rounded='lg' source={{
               uri: updImg
