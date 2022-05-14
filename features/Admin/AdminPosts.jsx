@@ -18,6 +18,7 @@ export default function ({ adminId }) {
   const [updImg, setUpdImg] = useState(null)
   const [uploading, setUploading] = useState(false)
   const [sending, setSending] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   const {
     isOpen,
@@ -200,14 +201,19 @@ export default function ({ adminId }) {
             Options
           </Text>
         </Box>
-        <Actionsheet.Item onPress={() => {
+        <Actionsheet.Item isLoading={deleting} isLoadingText='Deleting...' onPress={() => {
+          setDeleting(true)
           deleteMessage(currentLongPress).then(() => {
+            setDeleting(false)
             onClose()
-          }).catch(err => console.error(err))
+          }).catch(err => {
+            console.error(err)
+            setDeleting(false)
+          })
         }}
         >Delete
         </Actionsheet.Item>
-        <Actionsheet.Item>Cancel</Actionsheet.Item>
+        <Actionsheet.Item onPress={onClose}>Cancel</Actionsheet.Item>
       </Actionsheet.Content>
     </Actionsheet>
   )

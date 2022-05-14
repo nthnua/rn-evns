@@ -9,6 +9,7 @@ export default function ({ subdChnls, setSubdChnls }) {
   const [channels, setChannels] = useState([])
   const [loading, setLoading] = useState('true')
   const [currentLongPress, setCurrentLongPress] = useState('')
+
   const {
     isOpen,
     onOpen,
@@ -118,7 +119,7 @@ export default function ({ subdChnls, setSubdChnls }) {
                 }}
                 >Delete
                 </Actionsheet.Item>
-                <Actionsheet.Item>Cancel</Actionsheet.Item>
+                <Actionsheet.Item onPress={onClose}>Cancel</Actionsheet.Item>
               </Actionsheet.Content>
             </Actionsheet>
           </Box>
