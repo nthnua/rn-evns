@@ -24,8 +24,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "rn.evns",
-      "versionCode": "0.1"
+      "package": "com.nthnua.evns"
     },
     "web": {
       "favicon": "./assets/favicon.png"
