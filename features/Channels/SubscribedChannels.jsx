@@ -16,6 +16,10 @@ export default function ({ subdChnls, setSubdChnls }) {
     onClose
   } = useDisclose()
   const navigation = useNavigation()
+  const customOnClose = () => {
+    setCurrentLongPress('')
+    onClose()
+  }
   useEffect(() => {
     if (subdChnls.length > 0) {
       getChannels(subdChnls).then(chnls => {
@@ -101,7 +105,7 @@ export default function ({ subdChnls, setSubdChnls }) {
                   <Text color='primary.200'> + Button below </Text>
                 </Text>
               </Box>}
-            <Actionsheet isOpen={isOpen} onClose={onClose}>
+            <Actionsheet isOpen={isOpen} onClose={customOnClose} >
               <Actionsheet.Content>
                 <Box w='100%' h={60} px={4} justifyContent='center'>
                   <Text
@@ -115,11 +119,13 @@ export default function ({ subdChnls, setSubdChnls }) {
                 <Actionsheet.Item onPress={() => {
                   const updChnls = subdChnls.filter(chnl => chnl !== currentLongPress)
                   setSubdChnls(updChnls)
-                  onClose()
+                  customOnClose()
                 }}
                 >Delete
                 </Actionsheet.Item>
-                <Actionsheet.Item onPress={onClose}>Cancel</Actionsheet.Item>
+                <Actionsheet.Item onPress={() => {
+                  customOnClose()
+                }}>Cancel</Actionsheet.Item>
               </Actionsheet.Content>
             </Actionsheet>
           </Box>

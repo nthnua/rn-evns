@@ -26,6 +26,10 @@ export default function ({ adminId }) {
     onClose
   } = useDisclose()
 
+  const customOnClose = () => {
+    setCurrentLongPress('')
+    onClose()
+  }
   const route = useRoute()
   const { chnlId } = route.params
   const pickImage = async () => {
@@ -190,7 +194,7 @@ export default function ({ adminId }) {
   </>
   )
   const LgPress = (
-    <Actionsheet isOpen={isOpen} onClose={onClose}>
+    <Actionsheet isOpen={isOpen} onClose={customOnClose} >
       <Actionsheet.Content>
         <Box w='100%' h={60} px={4} justifyContent='center'>
           <Text
@@ -205,7 +209,7 @@ export default function ({ adminId }) {
           setDeleting(true)
           deleteMessage(currentLongPress).then(() => {
             setDeleting(false)
-            onClose()
+            customOnClose()
           }).catch(err => {
             console.error(err)
             setDeleting(false)
@@ -213,7 +217,9 @@ export default function ({ adminId }) {
         }}
         >Delete
         </Actionsheet.Item>
-        <Actionsheet.Item onPress={onClose}>Cancel</Actionsheet.Item>
+        <Actionsheet.Item onPress={() => {
+          customOnClose()
+        }}>Cancel</Actionsheet.Item>
       </Actionsheet.Content>
     </Actionsheet>
   )
