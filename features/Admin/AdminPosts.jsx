@@ -115,7 +115,7 @@ export default function ({ adminId }) {
               color: 'blue.400'
             }} fontWeight='500' ml='-0.5' mt='-1'
           >
-            {Date(post.get('time'))}
+            {new Date(post.get('time')).toString()}
           </Text>
           <Text
             fontSize='xs' _light={{

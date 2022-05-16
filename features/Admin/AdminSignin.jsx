@@ -1,4 +1,4 @@
-import { Box, Button, Center, Flex, Icon, Input, Stack, Text } from 'native-base'
+import { Box, Button, Flex, Icon, Input, Stack, Text } from 'native-base'
 import { useState } from 'react'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { signIn } from '../firebase'
